@@ -3,7 +3,6 @@ package com.griddynamics.product.controller;
 import com.griddynamics.product.domain.Product;
 import com.griddynamics.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

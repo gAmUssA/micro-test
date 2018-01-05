@@ -1,4 +1,4 @@
-package com.griddynamics.product;
+package com.griddynamics.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 
 @SpringBootApplication
 @EnableCassandraRepositories
-public class ProductApplication {
+public class UserApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ProductApplication.class, args);
+        SpringApplication.run(UserApplication.class, args);
     }
 
 }

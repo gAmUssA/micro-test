@@ -13,8 +13,8 @@ services:
       - 9160:9160
     environment:
       - INIT_DB=true
-    volumes:
-      - /var/lib/cassandra_node_1
+#    volumes:
+#      - /var/lib/cassandra_node_1
 
   cassandra-node-2:
     image: cassandra-node
@@ -24,19 +24,19 @@ services:
       - CASSANDRA_SEEDS=cassandra-node-1
     links:
       - cassandra-node-1:cassandra
-    volumes:
-      - /var/lib/cassandra_node_2
+#    volumes:
+#      - /var/lib/cassandra_node_2
 
   cassandra-node-3:
     image: cassandra-node
     container_name: cassandra-node-3
     restart: always
     environment:
-      - CASSANDRA_SEEDS=cassandra-node-2
+      - CASSANDRA_SEEDS=cassandra-node-1,cassandra-node-2
     links:
       - cassandra-node-2:cassandra
-    volumes:
-      - /var/lib/cassandra_node_3
+#    volumes:
+#      - /var/lib/cassandra_node_3
 
   product:
     image: product-service
@@ -44,16 +44,34 @@ services:
     restart: always
     ports:
       - 8081:8081
-    depends_on:
-      - cassandra-node-1
-      - cassandra-node-2
-      - cassandra-node-3
+#    depends_on:
+#      - cassandra-node-1
+#      - cassandra-node-2
+#      - cassandra-node-3
     links:
       - cassandra-node-1:cassandra_node_1
       - cassandra-node-1:cassandra_node_2
       - cassandra-node-1:cassandra_node_3
-    volumes:
-      - /var/lib/product_service
+#    volumes:
+#      - /var/lib/product_service
+
+  user:
+    image: user-service
+    container_name: user-service
+    restart: always
+    ports:
+      - 8082:8082
+#    depends_on:
+#      - cassandra-node-1
+#      - cassandra-node-2
+#      - cassandra-node-3
+    links:
+      - cassandra-node-1:cassandra_node_1
+      - cassandra-node-1:cassandra_node_2
+      - cassandra-node-1:cassandra_node_3
+#    volumes:
+#      - /var/lib/product_service
+
 
 
 
