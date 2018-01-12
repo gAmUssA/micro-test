@@ -6,71 +6,106 @@ services:
     image: cassandra-node
     container_name: cassandra-node-1
     restart: always
+    environment:
+      - INIT_DB=true
     ports:
       - 7000:7000
       - 7001:7001
       - 9042:9042
       - 9160:9160
-    environment:
-      - INIT_DB=true
-#    volumes:
-#      - /var/lib/cassandra_node_1
 
   cassandra-node-2:
     image: cassandra-node
     container_name: cassandra-node-2
+    depends_on:
+      - cassandra-node-1
     restart: always
     environment:
       - CASSANDRA_SEEDS=cassandra-node-1
     links:
       - cassandra-node-1:cassandra
-#    volumes:
-#      - /var/lib/cassandra_node_2
 
   cassandra-node-3:
     image: cassandra-node
     container_name: cassandra-node-3
+    depends_on:
+      - cassandra-node-1
     restart: always
     environment:
-      - CASSANDRA_SEEDS=cassandra-node-1,cassandra-node-2
+      - CASSANDRA_SEEDS=cassandra-node-1
     links:
       - cassandra-node-2:cassandra
-#    volumes:
-#      - /var/lib/cassandra_node_3
 
   product:
     image: product-service
     container_name: product-service
+    depends_on:
+      - cassandra-node-1
     restart: always
     ports:
-      - 8081:8081
-#    depends_on:
-#      - cassandra-node-1
-#      - cassandra-node-2
-#      - cassandra-node-3
+      - 8082:8080
     links:
       - cassandra-node-1:cassandra_node_1
       - cassandra-node-1:cassandra_node_2
       - cassandra-node-1:cassandra_node_3
-#    volumes:
-#      - /var/lib/product_service
 
   user:
     image: user-service
     container_name: user-service
+    depends_on:
+      - cassandra-node-1
     restart: always
     ports:
-      - 8082:8082
-#    depends_on:
-#      - cassandra-node-1
-#      - cassandra-node-2
-#      - cassandra-node-3
+      - 8083:8080
     links:
       - cassandra-node-1:cassandra_node_1
       - cassandra-node-1:cassandra_node_2
       - cassandra-node-1:cassandra_node_3
-#    volumes:
-#      - /var/lib/product_service
+
+
+
+# Apache Kafka
+  poc-kafka:
+    image: spotify/kafka
+    ports:
+    - "9092:9092"
+    - "2181:2181"
+    hostname: poc-kafka
+    expose:
+    - "9092"
+    - "2181"
+    # environment:
+    #     ADVERTISED_HOST: '0.0.0.0'
+    #     ADVERTISED_PORT: '9092'
+
+
+
+
+
+
+
+#  consumer:
+#    image: consumer
+#    container_name: consumer
+#    depends_on:
+#      - kafka
+#    restart: always
+#    ports:
+#      - 8084:8080
+#    links:
+#      - kafka:kafka
+
+#  producer:
+#    image: producer
+#    container_name: producer
+#    depends_on:
+#      - kafka
+#    restart: always
+#    ports:
+#      - 8085:8080
+#    links:
+#      - kafka:kafka
+
 
 
 

@@ -1,9 +1,9 @@
 CREATE KEYSPACE IF NOT EXISTS product_keyspace
-WITH replication = {'class':'SimpleStrategy', 'replication_factor':'2'}
+WITH replication = {'class':'SimpleStrategy', 'replication_factor':'QUORUM'}
 AND durable_writes = TRUE;
 
 CREATE KEYSPACE IF NOT EXISTS user_keyspace
-WITH replication = {'class':'SimpleStrategy', 'replication_factor':'2'}
+WITH replication = {'class':'SimpleStrategy', 'replication_factor':'QUORUM'}
 AND durable_writes = TRUE;
 
 CREATE TABLE IF NOT EXISTS product_keyspace.product (
@@ -20,3 +20,5 @@ first_name varchar,
 last_name varchar,
 email varchar,
 PRIMARY KEY (id));
+
+CONSISTENCY QUORUM;
